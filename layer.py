@@ -22,8 +22,8 @@ class EchoLayer(YowInterfaceLayer):
             time.sleep(0.5)
             #self.toLower(PresenceProtocolEntity(name = name)) #Set name Presence
             #time.sleep(0.5)
-            #self.toLower(AvailablePresenceProtocolEntity()) #Set online
-            #time.sleep(0.5)
+            self.toLower(AvailablePresenceProtocolEntity()) #Set online
+            time.sleep(0.5)
             self.toLower(messageProtocolEntity.ack(True)) #Set read (double v blue)
             time.sleep(0.5)
             #self.toLower(OutgoingChatstateProtocolEntity(OutgoingChatstateProtocolEntity.STATE_TYPING, Jid.normalize(messageProtocolEntity.getFrom(False)) )) #Set is writing
@@ -31,7 +31,7 @@ class EchoLayer(YowInterfaceLayer):
             #self.toLower(OutgoingChatstateProtocolEntity(OutgoingChatstateProtocolEntity.STATE_PAUSED, Jid.normalize(messageProtocolEntity.getFrom(False)) )) #Set no is writing
             #time.sleep(1)
             self.onTextMessage(messageProtocolEntity) #Send the answer
-            time.sleep(5)
+            time.sleep(0.5)
             self.toLower(UnavailablePresenceProtocolEntity()) #Set offline
             sys.exit(0)
 
