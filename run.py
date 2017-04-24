@@ -7,7 +7,17 @@ from yowsup.layers.coder                       import YowCoderLayer
 from yowsup.layers.network                     import YowNetworkLayer
 from yowsup.env                                import YowsupEnv
 
-import os
+import os, signal, sys
+
+class TimeoutException(Exception):   # Custom exception class
+    pass
+
+def timeout_handler(signum, frame):   # Custom signal handler
+    raise TimeoutException
+
+# Change the behavior of SIGALRM
+signal.signal(signal.SIGALRM, timeout_handler)
+
 #Uncomment to log
 #import logging
 #logging.basicConfig(level=logging.DEBUG)
@@ -28,4 +38,13 @@ if __name__==  "__main__":
     stack.setProp(YowCoderLayer.PROP_DOMAIN, YowConstants.DOMAIN)
     stack.setProp(YowCoderLayer.PROP_RESOURCE, YowsupEnv.getCurrent().getResource())  #info about us as WhatsApp client
 
-    stack.loop( timeout = 0.5, discrete = 0.5 )                                       #this is the program mainloop
+    signal.alarm(os.getenv('MAX_RUNTIME', 3600))#kill the process after a defined time
+    # This try/except loop ensures that 
+    #   you'll catch TimeoutException when it's sent.
+    try:
+        stack.loop( timeout = 0.5, discrete = 0.5 )                                       #this is the program mainloop
+    except TimeoutException:
+        sys.exit(0)
+    else:
+        signal.alarm(0) # Reset the alarm
+    
